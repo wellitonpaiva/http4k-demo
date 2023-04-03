@@ -1,3 +1,5 @@
+import org.http4k.contract.ContractRoute
+import org.http4k.contract.ContractRoutingHttpHandler
 import org.http4k.contract.contract
 import org.http4k.contract.meta
 import org.http4k.contract.openapi.ApiInfo
@@ -24,13 +26,13 @@ fun main() {
     ).asServer(SunHttp()).start()
 }
 
-val api = contract {
+val api: ContractRoutingHttpHandler = contract {
     renderer = OpenApi3(ApiInfo("API Example", "1.0"))
     descriptionPath = SWAGGER_PATH
     routes += pingHandler
 }
 
-val pingHandler = "/ping" meta {
+val pingHandler: ContractRoute = "/ping" meta {
     summary = "Say Pong"
     returning(OK, textLens to "Sample Greeting")
 } bindContract GET to { _: Request ->
